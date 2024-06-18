@@ -6,13 +6,13 @@ import jwt from "jsonwebtoken"
 //signup
 export const register = async (req, res) => {
     try {
-        const { fullName, username, password, confirmpassword, gender } = req.body;
-        if (!fullName || !username || !password || !confirmpassword || !gender) {
+        const { fullName, username, password, confirmPassword, gender } = req.body;
+        if (!fullName || !username || !password || !confirmPassword || !gender) {
             return res.status(400).json({ message: "All fields are required" })
         }
 
         //password checking
-        if (password !== confirmpassword) {
+        if (password !== confirmPassword) {
             return res.status(400).json({ message: "Password do not match.Please try again." })
         }
 

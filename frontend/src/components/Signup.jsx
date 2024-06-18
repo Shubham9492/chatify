@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -10,12 +12,28 @@ const Signup = () => {
     gender: "",
   });
 
+  const navigate = useNavigate();
+
   const handleCheckbox = (gender) => {
     setUser({ ...user, gender })
   }
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      const res = await axios.post(`http://localhost:8080/api/v1/user/register`, user, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      if (res.data.success) {
+        navigate("/login");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(error);
+    }
     setUser({
       fullName: "",
       username: "",
@@ -27,33 +45,53 @@ const Signup = () => {
   }
 
   return (
-    <div className='min-w-96 mx-auto'>
+    <div className="min-w-96 mx-auto">
       <div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100'>
-        <h1 className='text-3xl font-bold text-center text-gray-300'>Sign Up</h1>
+        <h1 className='text-3xl font-bold text-center'>Sign Up</h1>
         <form onSubmit={onSubmitHandler} action="">
           <div>
             <label className='label p-2'>
               <span className='text-base label-text'>Full Name</span>
             </label>
-            <input value={user.fullName} onChange={(e) => setUser({ ...user, fullName: e.target.value })} className='w-full input input-bordered h-10' type="text" placeholder='Full name' />
+            <input
+              value={user.fullName}
+              onChange={(e) => setUser({ ...user, fullName: e.target.value })}
+              className='w-full input input-bordered h-10'
+              type="text"
+              placeholder='Full Name' />
           </div>
           <div>
             <label className='label p-2'>
               <span className='text-base label-text'>Username</span>
             </label>
-            <input value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })} className='w-full input input-bordered h-10' type="text" placeholder='Username' />
+            <input
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              className='w-full input input-bordered h-10'
+              type="text"
+              placeholder='Username' />
           </div>
           <div>
             <label className='label p-2'>
               <span className='text-base label-text'>Password</span>
             </label>
-            <input value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} className='w-full input input-bordered h-10' type="password" placeholder='Password' />
+            <input
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              className='w-full input input-bordered h-10'
+              type="password"
+              placeholder='Password' />
           </div>
           <div>
             <label className='label p-2'>
               <span className='text-base label-text'>Confirm Password</span>
             </label>
-            <input value={user.confirmPassword} onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })} className='w-full input input-bordered h-10' type="password" placeholder='Confirm Password' />
+            <input
+              value={user.confirmPassword}
+              onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+              className='w-full input input-bordered h-10'
+              type="password"
+              placeholder='Confirm Password' />
           </div>
           <div className='flex items-center my-4'>
             <div className='flex items-center'>
@@ -77,11 +115,11 @@ const Signup = () => {
           </div>
           <p className='text-center my-2'>Already have an account? <Link to="/login"> login </Link></p>
           <div>
-            <button type='submit' className='btn btn-block btn-sm mt-2 border border-slate-700'>Signup</button>
+            <button type='submit' className='btn btn-block btn-sm mt-2 border border-slate-700'>Sign Up</button>
           </div>
-        </form >
-      </div >
-    </div >
+        </form>
+      </div>
+    </div>
   )
 }
 
