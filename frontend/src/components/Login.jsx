@@ -2,12 +2,16 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '../redux/userSlice';
 
 const Login = () => {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+
+  const distpatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
@@ -21,12 +25,13 @@ const Login = () => {
         withCredentials: true
       }); 
         navigate("/");
-        console.log(res);
+        // console.log(res);
+        distpatch(setAuthUser(res.data))
         toast.success(res.data.message);
     } catch (error) {
       toast.error(error.response.data.message)
       console.log(error);
-    }
+    } 
     setUser({
       username: "",
       password: "",
@@ -50,7 +55,7 @@ const Login = () => {
             </label>
             <input value={user.password} onChange={(e)=>setUser({...user,password:e.target.value})} className='w-full input input-bordered h-10' type="password" placeholder='Password' />
           </div>
-          <p className='text-center my-2'>Don't have an account? <Link to="/register"> SignUp </Link></p>
+          <p className='text-center my-2'>Don't have an account? <Link to="/register"> Signup </Link></p>
           <div>
             <button type='submit' className='btn btn-block btn-sm mt-2 border border-slate-700'>Login</button>
           </div>
