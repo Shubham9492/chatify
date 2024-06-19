@@ -1,13 +1,16 @@
-import React from 'react'
+
+import React, { useEffect } from 'react'
 import SendInput from './SendInput'
-import Messages from './Messages'
-import { useDispatch, useSelector } from 'react-redux';
+import Messages from './Messages';
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedUser } from '../redux/userSlice';
 
 const MessageContainer = () => {
   const { selectedUser, authUser, onlineUsers } = useSelector(store => store.user);
   const dispatch = useDispatch();
 
   const isOnline = onlineUsers?.includes(selectedUser?._id);
+
   return (
     <>
       {
@@ -30,13 +33,14 @@ const MessageContainer = () => {
           </div>
         ) : (
           <div className='md:min-w-[550px] flex flex-col justify-center items-center'>
-            <h1 className='text-4xl text-white font-bold'>Welcome to CHATIFY {authUser?.fullName} </h1>
-            <h1 className='text-2xl text-white'>Let's start the conversation</h1>
+            <h1 className='text-4xl text-white font-bold'>Welcome to Chatify,{authUser?.fullName} </h1>
+            <h1 className='text-2xl text-white'>Let's start conversation</h1>
 
           </div>
         )
       }
     </>
+
   )
 }
 
