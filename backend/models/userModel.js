@@ -1,18 +1,18 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const userModel = new mongoose.Schema({
-    fullName :{
+    fullName:{
         type:String,
-        requied:true
+        required:true
     },
-    username :{
-        type:String,
-        requied:true,
-        unique:true
+    username:{
+      type:String,
+      required:true,
+      unique:true
     },
     password:{
         type:String,
-        requied:true,
+        required:true
     },
     profilePhoto:{
         type:String,
@@ -20,9 +20,8 @@ const userModel = new mongoose.Schema({
     },
     gender:{
         type:String,
-        enum:["male","female"],
-        requied:true
+        enum:["male", "female"],
+        required:true
     }
-},{timestamps:true});
-
-export const User= mongoose.model("User",userModel)
+}, {timestamps:true});
+export const User = mongoose.model("User", userModel);

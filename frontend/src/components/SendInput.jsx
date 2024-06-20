@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import { IoSendSharp } from "react-icons/io5";
-import axios from 'axios';
+import React, {useState } from 'react'
+import { IoSend } from "react-icons/io5";
+import axios from "axios";
+import {useDispatch,useSelector} from "react-redux";
 import { setMessages } from '../redux/messageSlice';
-import { useDispatch,useSelector } from 'react-redux';
-
+import { BASE_URL } from '..';
 
 const SendInput = () => {
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();
-    const { selectedUser } = useSelector(store => store.user);
-    const { messages } = useSelector(store => store.message);
+    const {selectedUser} = useSelector(store=>store.user);
+    const {messages} = useSelector(store=>store.message);
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:8080/api/v1/message/send/${selectedUser?._id}`, { message }, {
-                headers: {
-                    'Content-Type': 'application/json'
+            const res = await axios.post(`${BASE_URL}/api/v1/message/send/${selectedUser?._id}`, {message}, {
+                headers:{
+                    'Content-Type':'application/json'
                 },
-                withCredentials: true
+                withCredentials:true
             });
             dispatch(setMessages([...messages, res?.data?.newMessage]))
         } catch (error) {
             console.log(error);
-        }
+        } 
         setMessage("");
     }
     return (
@@ -37,7 +37,7 @@ const SendInput = () => {
                     className='border text-sm rounded-lg block w-full p-3 border-zinc-500 bg-gray-600 text-white'
                 />
                 <button type="submit" className='absolute flex inset-y-0 end-0 items-center pr-4'>
-                    <IoSendSharp />
+                    <IoSend />
                 </button>
             </div>
         </form>
